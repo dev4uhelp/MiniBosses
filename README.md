@@ -1,5 +1,5 @@
 # MiniBosses
-Adds very customisable Bosses
+A very customizable boss plugin
 # Commands
 Create and spawn boss: /minibosses create network-id/entityType Name
 
@@ -10,9 +10,9 @@ Remove boss: /minibosses delete Name
 List bosses in the config: /minibosses list
 
 #Supported Entities
-Chicken,Cow,Pig,Sheep,Wolf,Villager,Mooshroom,Squid,Rabbit,Bat,IronGolem,SnowGolem,Ocelot,
-Horses,Zombie,Creeper,Skeleton,Spider,pigman,slime,enderman,silverfish,cavespider,ghast,magmacube
-,blaze,zombievillager,witch,stray,husk,witherskeleton,wither,enderdragon,shulker,endermite,human
+Chicken, Cow, Pig, Sheep, Wolf, Villager, Mooshroom, Squid, Rabbit, Bat, IronGolem, SnowGolem, Ocelot, 
+Horses, Zombie, Creeper, Skeleton, Spider, pigman, slime, enderman, silverfish, cavespider, ghast, magmacube
+, blaze, zombievillager, witch, stray, husk, witherskeleton, wither, enderdragon, shulker, endermite, human
 
 # Config Explanation
 ```

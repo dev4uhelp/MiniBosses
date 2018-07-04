@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace MiniBosses;
 
 use pocketmine\entity\Creature;
@@ -18,24 +19,36 @@ use pocketmine\utils\UUID;
 class Boss extends Creature {
 
 	const NETWORK_ID = 1000;
-	public $networkId = 32;
+	/** @var int */
+	protected $networkId = 32;
 	/** @var Player|null */
-	public $target;
-	public $spawnPos;
-	public $attackDamage = 1;
-	public $attackRate = 10;
-	public $attackDelay = 0;
-	public $speed;
+	protected $target;
+	/** @var Position */
+	protected $spawnPos;
+	/** @var float|int */
+	protected $attackDamage = 1;
+	/** @var int */
+	protected $attackRate = 10;
+	/** @var int */
+	protected $attackDelay = 0;
+	/** @var int */
+	protected $speed;
 	/** @var Item[][] */
-	public $drops = [];
-	public $respawnTime;
-	public $skin;
-	public $heldItem;
-	public $range;
-	public $knockbackTicks = 0;
-	public $scale;
+	protected $drops = [];
+	/** @var int */
+	protected $respawnTime;
+	/** @var string */
+	protected $skin;
+	/** @var Item */
+	protected $heldItem;
+	/** @var float */
+	protected $range;
+	/** @var int */
+	protected $knockbackTicks = 0;
+	/** @var float|int */
+	protected $scale;
 	/** @var Main */
-	private $plugin;
+	protected $plugin;
 
 	public function __construct($chunk, $nbt) {
 		parent::__construct($chunk, $nbt);
@@ -83,7 +96,7 @@ class Boss extends Creature {
 		parent::spawnTo($player);
 		if($this->networkId === 63) {
 			$pk = new AddPlayerPacket();
-			$pk->uuid = UUID::fromData($this->getId(), $this->skin, $this->getNameTag());
+			$pk->uuid = UUID::fromData((string) $this->getId(), $this->skin, $this->getNameTag());
 			$pk->username = $this->getName();
 			$pk->entityRuntimeId = $this->getId();
 			$pk->position = $this->asPosition();

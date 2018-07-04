@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace MiniBosses;
 
 use pocketmine\command\Command;
@@ -16,9 +17,7 @@ use pocketmine\utils\TextFormat as TF;
 
 class Main extends PluginBase implements Listener {
 
-	const NetworkIds = ["chicken" => 10, "cow" => 11, "pig" => 12, "sheep" => 13, "wolf" => 14, "villager" => 15, "mooshroom" => 16, "squid" => 17, "rabbit" => 18, "bat" => 19, "irongolem" => 20, "snowgolem" => 21, "ocelot" => 22, "horse" => 23, "donkey" => 24, "mule" => 25, "skeletonhorse" => 26, "zombiehorse" => 27, "zombie" => 32, "creeper" => 33, "skeleton" => 34, "spider" => 35, "pigman" => 36, "slime" => 37, "enderman" => 38, "silverfish" => 39, "cavespider" => 40, "ghast" => 41, "magmacube" => 42, "blaze" => 43, "zombievillager" => 44, "witch" => 45, "stray" => 46, "husk" => 47, "witherskeleton" => 48, #"guardian"=>49, todo: find out data tag for shooting laser, now always shooting
-	                    #"elderguardian"=>50,
-	                    "wither" => 52, "enderdragon" => 53, "shulker" => 54, "endermite" => 55, "human" => 63];
+	const NetworkIds = ["chicken" => 10, "cow" => 11, "pig" => 12, "sheep" => 13, "wolf" => 14, "villager" => 15, "mooshroom" => 16, "squid" => 17, "rabbit" => 18, "bat" => 19, "irongolem" => 20, "snowgolem" => 21, "ocelot" => 22, "horse" => 23, "donkey" => 24, "mule" => 25, "skeletonhorse" => 26, "zombiehorse" => 27, "zombie" => 32, "creeper" => 33, "skeleton" => 34, "spider" => 35, "pigman" => 36, "slime" => 37, "enderman" => 38, "silverfish" => 39, "cavespider" => 40, "ghast" => 41, "magmacube" => 42, "blaze" => 43, "zombievillager" => 44, "witch" => 45, "stray" => 46, "husk" => 47, "witherskeleton" => 48, "wither" => 52, "enderdragon" => 53, "shulker" => 54, "endermite" => 55, "human" => 63];
 	/** @var Config */
 	public $data;
 
@@ -36,21 +35,21 @@ class Main extends PluginBase implements Listener {
 			if(!($sender instanceof Player)) {
 				$sender->sendMessage("Please run in-game");
 			}elseif(count($args) >= 3) {
-				$networkid = $args[1];
+				$networkId = $args[1];
 				array_shift($args);
 				array_shift($args);
 				$name = implode(' ', $args);
 				if($this->data->get($name, null) === null) {
-					if(is_numeric($networkid) && in_array($networkid, self::NetworkIds)) {
+					if(is_numeric($networkId) and in_array($networkId, self::NetworkIds)) {
 						// Do absolutely nothing.
-					}elseif(!is_numeric($networkid) && array_key_exists($networkid, self::NetworkIds)) {
-						$networkid = self::NetworkIds[strtolower($networkid)];
+					}elseif(!is_numeric($networkId) and array_key_exists($networkId, self::NetworkIds)) {
+						$networkId = self::NetworkIds[strtolower($networkId)];
 					}else {
-						$sender->sendMessage(TF::RED."Unrecognised Network ID or Entity type $networkid");
+						$sender->sendMessage(TF::RED."Unrecognised Network ID or Entity type $networkId");
 						return true;
 					}
 					$heldItem = $sender->getInventory()->getItemInHand();
-					$this->data->set($name, ["network-id" => (int) $networkid, "x" => $sender->x, "y" => $sender->y, "z" => $sender->z, "level" => $sender->level->getName(), "health" => 20, "range" => 10, "attackDamage" => 1, "attackRate" => 10, "speed" => 1, "drops" => "1;0;1;;100 2;0;1;;50 3;0;1;;25", "respawnTime" => 100, "skin" => ($networkid === 63 ? bin2hex($sender->getSkin()->getSkinData()) : ""), "heldItem" => ($heldItem->getId().";".$heldItem->getDamage().";".$heldItem->getCount().";".$heldItem->getNamedTag()->toString()), "scale" => 1]);
+					$this->data->set($name, ["network-id" => (int) $networkId, "x" => $sender->x, "y" => $sender->y, "z" => $sender->z, "level" => $sender->level->getName(), "health" => 20, "range" => 10, "attackDamage" => 1, "attackRate" => 10, "speed" => 1, "drops" => "1;0;1;;100 2;0;1;;50 3;0;1;;25", "respawnTime" => 100, "skin" => ($networkId === 63 ? bin2hex($sender->getSkin()->getSkinData()) : ""), "heldItem" => ($heldItem->getId().";".$heldItem->getDamage().";".$heldItem->getCount().";".$heldItem->getNamedTag()->toString()), "scale" => 1]);
 					$this->data->save();
 					$this->spawnBoss($name);
 					$sender->sendMessage(TF::GREEN."Successfully created MiniBoss: $name");
@@ -76,7 +75,7 @@ class Main extends PluginBase implements Listener {
 						$l = $this->getServer()->getLevelByName($data["level"]);
 						if($chunk = $l->getChunk($data["x"] >> 4, $data["z"] >> 4)) {
 							foreach($chunk->getEntities() as $e) {
-								if($e instanceof Boss && $e->getNameTag() === $name) {
+								if($e instanceof Boss and $e->getNameTag() === $name) {
 									$e->close();
 								}
 							}
@@ -141,7 +140,9 @@ class Main extends PluginBase implements Listener {
 		if($this->data->get($name)) {
 			$this->getScheduler()->scheduleDelayedTask(new class($this, $name) extends Task {
 
+				/** @var Main */
 				private $plugin;
+				/** @var string */
 				private $name;
 
 				public function __construct(Main $plugin, $name) {
