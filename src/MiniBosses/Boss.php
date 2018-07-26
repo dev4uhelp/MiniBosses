@@ -51,8 +51,10 @@ class Boss extends Creature {
 	protected $plugin;
 
 	public function __construct($chunk, $nbt) {
-		parent::__construct($chunk, $nbt);
 		$this->networkId = (int) $this->namedtag->getInt("networkId");
+		$this->width = Data::WIDTHS[$this->networkId];
+		$this->height = Data::HEIGHTS[$this->networkId];
+		parent::__construct($chunk, $nbt);
 		$this->range = $this->namedtag->getFloat("range");
 		$this->spawnPos = new Position($this->namedtag->getListTag("spawnPos")[0], $this->namedtag->getListTag("spawnPos")[1], $this->namedtag->getListTag("spawnPos")[2], $this->level);
 		$this->attackDamage = $this->namedtag->getFloat("attackDamage");

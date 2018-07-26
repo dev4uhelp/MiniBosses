@@ -17,7 +17,7 @@ use pocketmine\utils\TextFormat as TF;
 
 class Main extends PluginBase implements Listener {
 
-	const NetworkIds = ["chicken" => 10, "cow" => 11, "pig" => 12, "sheep" => 13, "wolf" => 14, "villager" => 15, "mooshroom" => 16, "squid" => 17, "rabbit" => 18, "bat" => 19, "irongolem" => 20, "snowgolem" => 21, "ocelot" => 22, "horse" => 23, "donkey" => 24, "mule" => 25, "skeletonhorse" => 26, "zombiehorse" => 27, "zombie" => 32, "creeper" => 33, "skeleton" => 34, "spider" => 35, "pigman" => 36, "slime" => 37, "enderman" => 38, "silverfish" => 39, "cavespider" => 40, "ghast" => 41, "magmacube" => 42, "blaze" => 43, "zombievillager" => 44, "witch" => 45, "stray" => 46, "husk" => 47, "witherskeleton" => 48, "wither" => 52, "enderdragon" => 53, "shulker" => 54, "endermite" => 55, "human" => 63];
+
 	/** @var Config */
 	public $data;
 
@@ -40,10 +40,10 @@ class Main extends PluginBase implements Listener {
 				array_shift($args);
 				$name = implode(' ', $args);
 				if($this->data->get($name, null) === null) {
-					if(is_numeric($networkId) and in_array($networkId, self::NetworkIds)) {
-						// Do absolutely nothing.
-					}elseif(!is_numeric($networkId) and array_key_exists($networkId, self::NetworkIds)) {
-						$networkId = self::NetworkIds[strtolower($networkId)];
+					if(is_numeric($networkId) and in_array($networkId, Data::NETWORK_IDS)) {
+						$networkId = (int) $networkId;
+					}elseif(array_key_exists($networkId, Data::NETWORK_IDS)) {
+						$networkId = Data::NETWORK_IDS[strtolower($networkId)];
 					}else {
 						$sender->sendMessage(TF::RED."Unrecognised Network ID or Entity type $networkId");
 						return true;
