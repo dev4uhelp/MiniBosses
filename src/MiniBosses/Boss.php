@@ -6,8 +6,10 @@ use pocketmine\entity\Creature;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\Item;
+use pocketmine\level\Level;
 use pocketmine\level\Position;
 use pocketmine\math\Vector3;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\ListTag;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
@@ -50,11 +52,11 @@ class Boss extends Creature {
 	/** @var Main */
 	protected $plugin;
 
-	public function __construct($chunk, $nbt) {
-		$this->networkId = (int) $this->namedtag->getInt("networkId");
+	public function __construct(Level $level, CompoundTag $nbt) {
+		$this->networkId = (int) $nbt->getInt("networkId");
 		$this->width = Data::WIDTHS[$this->networkId];
 		$this->height = Data::HEIGHTS[$this->networkId];
-		parent::__construct($chunk, $nbt);
+		parent::__construct($level, $nbt);
 		$this->range = $this->namedtag->getFloat("range");
 		$this->spawnPos = new Position($this->namedtag->getListTag("spawnPos")[0], $this->namedtag->getListTag("spawnPos")[1], $this->namedtag->getListTag("spawnPos")[2], $this->level);
 		$this->attackDamage = $this->namedtag->getFloat("attackDamage");
